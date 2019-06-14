@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Benjalamela</title>
+</head>
+<body>
+
+    <h1>servicio de autenticación</h1>
+    <hr>
+
+    <h3>Antes de comenzar</h3>
+    <ol>
+            <li value="1">Agrega Firebase a tu proyecto de Android.</li><br>
+            
+            <li>Agrega la dependencia para Firebase Authentication a tu archivo build.gradle de nivel de app:<br>
+                implementation 'com.google.firebase:firebase-auth:16.1.0'</li><br>
+                <li>Obtén las claves del servidor de tu proyecto:<br>
+                1.Ve a la página Cuentas de servicio en la configuración del proyecto.<br>
+                2.Haz clic en Generar nueva clave privada en la parte inferior de la sección SDK de Firebase Admin de la página Cuentas de servicio.<br>
+                3. El par de claves públicas o privadas de la cuenta de servicio nueva se guarda de manera automática en la computadora. Copia este archivo en el servidor de autenticación.
+
+                </li>
+            </ol>
+
+    <h3>Autenticación con Firebase</h3>
+    <dl>
+
+        <dt>1- En el método onCreate de tu actividad de acceso, obtén la instancia compartida del objeto FirebaseAuth:
+        </dt>
+        
+        <dd>private lateinit var auth: FirebaseAuth// ...<br>
+            // Initialize Firebase Auth<br>
+            auth = FirebaseAuth.getInstance()<br>
+            CustomAuthActivity.kt
+        </dd>
+        </dl>
+        
+        <dl>
+        
+        <dt>2- Cuando inicies la actividad, verifica que el usuario haya accedido:
+        </dt>
+        
+        <dd>public override fun onStart() {<br>
+            super.onStart()<br>
+            // Check if user is signed in (non-null) and update UI <br>
+            accordingly.<br>
+            val currentUser = auth.currentUser <br>
+            updateUI(currentUser)<br>
+        }
+        </dd>
+        </dl>
+        <dl>
+
+            <dt>3- Cuando los usuarios acceden a la app, envía sus credenciales de acceso (por <br>
+                ejemplo, el nombre de usuario y la contraseña) al servidor de autenticación. Tu 
+                servidor verifica las credenciales y devuelve un token personalizado si son válidas.</dt>
+            
+            <dd></dd>
+            
+            </dl>
+
+            <dl>
+
+                <dt>4- Después de recibir el token personalizado de tu servidor de autenticación, pásalo a signInWithCustomToken para que el usuario acceda:
+                </dt>
+                <dd>customToken?.let {<br>
+                    auth.signInWithCustomToken(it)<br>
+                    .addOnCompleteListener(this) { task -><br>
+                        if (task.isSuccessful) {<br>
+                            // Sign in success, update UI with the <br>
+                            signed-in user's information<br>
+                            Log.d(TAG, <br>
+                            "signInWithCustomToken:success")<br>
+                            val user = auth.currentUser<br>
+                            updateUI(user)<br>
+                        } else {<br>
+                            // If sign in fails, display a message <br>
+                            to the user.<br>
+                            Log.w(TAG, <br>
+                            "signInWithCustomToken:failure", task.exception)<br>
+                            Toast.makeText(baseContext, <br>
+                            "Authentication failed.",
+                            Toast.LENGTH_SHORT).show()
+                    updateUI(null)<br><br>
+                    Si el acceso se ejecuta de forma correcta, el AuthStateListener puede usar el método getCurrentUser para obtener los datos de la cuenta del usuario.
+                </dd>
+                
+                </dl>
+    <h3>Pasos siguientes </h3>
+
+    <p>Cuando un usuario accede por primera vez, se crea una cuenta de usuario nueva y se la vincula con las credenciales (el nombre de usuario y la contraseña, el número de teléfono o la información del proveedor de autenticación) con las que accedió el usuario. 
+    </p>
+    <p>
+        La mayoría de las apps necesitan identificar a los usuarios. Conocer la identidad de un usuario permite que una app <br>guarde sus datos en la nube de forma segura y proporcione la misma experiencia personalizada<br> en todos los dispositivos del usuario
+        Firebase Authentication proporciona servicios de backend, SDK fáciles de usar y bibliotecas de IU ya elaboradas para <br>autenticar a los usuarios en tu app. Admite la autenticación mediante contraseñas, números de <br>teléfono, proveedores de identidad federada populares, como Google, Facebook y Twitter, y mucho más.
+        <br>Firebase Authentication se integra estrechamente en otros servicios de Firebase y aprovecha los estándares de la <br>industria como OAuth 2.0 y OpenID Connect, <br>por lo que se puede integrar fácilmente con tu backend personalizado.
+    </p>
+        
+</body>
+</html>
